@@ -1,0 +1,67 @@
+import * as path from "path";
+
+import got from "got";
+
+import OclifCommand from "@oclif/command";
+
+import { API } from "./api";
+
+import { ErrorResponseInterface } from "./interfaces/responses.interface";
+import { SettingsInterface } from "./interfaces/settings.interface";
+
+import { Settings } from "./utils/settings";
+import { APPLICATION_KEY_ERRORS, REMOTE_ERRORS } from "./errors";
+
+export abstract class Command extends OclifCommand {
+  protected readonly settings = new Settings<SettingsInterface>(
+    path.join(this.config.configDir, "config.json")
+  );
+
+  protected readonly got = got.extend({
+    hooks: {
+      beforeError: [
+        (error) => {
+          if (error instanceof got.HTTPError) {
+            const { body, statusCode } = error.response;
+            const { message } = body as ErrorResponseInterface;
+
+            if (statusCode >= 500) error.message = "An error has occurred, please try again later!";
+            else error.message = Array.isArray(message) ? message.join("\n") : message;
+          }
+
+          return error;
+        }
+      ],
+
+      beforeRequest: [
+        (options) => {
+          const { key } = this.settings.read();
+
+          if (key) {
+            options.headers = {
+              authorization: key,
+              ...options.headers
+            };
+          }
+        }
+      ]
+    },
+    prefixUrl: this.settings.read().remote,
+    responseType: "json"
+  });
+
+  protected readonly bytebin = new API(this.got);
+
+  protected readonly requireKey?: boolean;
+
+  protected readonly requireRemote?: boolean;
+
+  async init(): Promise<void> {
+    if (!this.requireKey && !this.requireRemote) return;
+
+    const { key, remote } = this.settings.read();
+
+    if (this.requireKey && !key) return this.error(APPLICATION_KEY_ERRORS.UNSET);
+    if (this.requireRemote && !remote) return this.error(REMOTE_ERRORS.UNSET);
+  }
+}

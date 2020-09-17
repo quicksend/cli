@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "importHelpers": true,
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "outDir": "lib",
+    "paths": {},
+    "removeComments": true,
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2017"
+  },
+  "include": ["src/**/*"]
+}

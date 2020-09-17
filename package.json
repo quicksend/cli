@@ -1,0 +1,78 @@
+{
+  "name": "bytebin-cli",
+  "description": "CLI for Bytebin",
+  "version": "0.0.0",
+  "author": "alexy4744 @alexy4744",
+  "bin": {
+    "bytebin": "./bin/run"
+  },
+  "bugs": "https://github.com/project-bytebin/cli/issues",
+  "dependencies": {
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-autocomplete": "^0.2.0",
+    "@oclif/plugin-commands": "^1.3.0",
+    "@oclif/plugin-help": "^3.2.0",
+    "@oclif/plugin-not-found": "^1.2.4",
+    "@oclif/plugin-which": "^1.0.3",
+    "cli-ux": "^5.5.0",
+    "form-data": "^3.0.0",
+    "got": "^11.6.2",
+    "pretty-bytes": "^5.4.1",
+    "terminal-link": "^2.1.1",
+    "tslib": "^2.0.1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
+    "@types/node": "^14.10.1",
+    "@types/progress-stream": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "globby": "^11.0.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/project-bytebin/cli",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "bin": "bytebin",
+    "commands": "./lib/commands",
+    "plugins": [
+      "@oclif/plugin-autocomplete",
+      "@oclif/plugin-commands",
+      "@oclif/plugin-help",
+      "@oclif/plugin-not-found",
+      "@oclif/plugin-which"
+    ],
+    "topics": {
+      "remote": {
+        "description": "manage upstream remote"
+      }
+    }
+  },
+  "repository": "project-bytebin/cli",
+  "scripts": {
+    "postpack": "rimraf oclif.manifest.json",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
+}
