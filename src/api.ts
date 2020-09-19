@@ -15,7 +15,7 @@ export class API {
 
     return this.got
       .get<IdentifyResponseInterface>("users/@me/identify", { headers })
-      .then((res) => res.body);
+      .json();
   }
 
   upload(
@@ -33,6 +33,6 @@ export class API {
         }
       })
       .on("uploadProgress", (progress) => progressListener && progressListener(progress))
-      .then((res) => res.body);
+      .json();
   }
 }
