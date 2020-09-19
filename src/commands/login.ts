@@ -24,11 +24,7 @@ export default class Login extends Command {
 
     cli.action.stop("success!");
 
-    cli.action.start("Saving credentials", "initializing", { stdout: true });
-
     this.settings.update({ key: args.key });
-
-    cli.action.stop("done!");
 
     this.log(`Successfully authenticated as ${user.displayName}!`);
   }
