@@ -6,11 +6,15 @@ import OclifCommand from "@oclif/command";
 
 import { API } from "./api";
 
+import { APPLICATION_KEY_ERRORS, REMOTE_ERRORS } from "./errors";
+
 import { ErrorResponseInterface } from "./interfaces/responses.interface";
 import { SettingsInterface } from "./interfaces/settings.interface";
 
 import { Settings } from "./utils/settings";
-import { APPLICATION_KEY_ERRORS, REMOTE_ERRORS } from "./errors";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pkg = require("../package.json");
 
 export abstract class Command extends OclifCommand {
   protected readonly settings = new Settings<SettingsInterface>(
@@ -18,6 +22,9 @@ export abstract class Command extends OclifCommand {
   );
 
   protected readonly got = got.extend({
+    headers: {
+      "user-agent": `${pkg.name}/${pkg.version} (${pkg.homepage})`
+    },
     hooks: {
       beforeError: [
         (error) => {
@@ -63,5 +70,10 @@ export abstract class Command extends OclifCommand {
 
     if (this.requireKey && !key) return this.error(APPLICATION_KEY_ERRORS.UNSET);
     if (this.requireRemote && !remote) return this.error(REMOTE_ERRORS.UNSET);
+  }
+
+  async catch(error: Error): Promise<void> {
+    if (error instanceof got.RequestError) this.error(error.message);
+    else super.catch(error);
   }
 }
