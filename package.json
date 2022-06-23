@@ -17,7 +17,7 @@
     "@oclif/plugin-which": "^1.0.3",
     "cli-ux": "^5.5.0",
     "form-data": "^3.0.0",
-    "got": "^11.6.2",
+    "got": "^11.8.5",
     "pretty-bytes": "^5.4.1",
     "terminal-link": "^2.1.1",
     "tslib": "^2.0.1"
